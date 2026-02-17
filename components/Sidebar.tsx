@@ -20,6 +20,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { name: "Stocks", href: "/protected/stocks", icon: "📈", roles: ["admin", "manager", "staff"] },
     { name: "Orders", href: "/protected/orders", icon: "🛒", roles: ["admin", "manager", "staff"] },
     { name: "Customers", href: "/protected/customers", icon: "👤", roles: ["admin", "manager"] },
+    { name: "Reviews", href: "/protected/reviews", icon: "⭐", roles: ["admin", "manager"] },
     { name: "Complaints", href: "/protected/complaints", icon: "⚠️", roles: ["admin", "staff"] },
     { name: "Attendance", href: "/protected/attendance", icon: "📅", roles: ["admin", "manager", "staff"] },
     { name: "Reports", href: "/protected/reports", icon: "📋", roles: ["admin", "manager"] },
