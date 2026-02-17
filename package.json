@@ -1,0 +1,43 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "@tiptap/extension-placeholder": "^3.16.0",
+    "@tiptap/react": "^3.16.0",
+    "@tiptap/starter-kit": "^3.16.0",
+    "axios": "^1.13.2",
+    "chart.js": "^4.5.1",
+    "cloudinary": "^2.9.0",
+    "cloudinary-react": "^1.8.1",
+    "formik": "^2.4.9",
+    "framer-motion": "^12.28.1",
+    "next": "16.1.4",
+    "next-auth": "5.0.0-beta.30",
+    "nodemailer": "^7.0.12",
+    "react": "19.2.3",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "19.2.3",
+    "react-hot-toast": "^2.6.0",
+    "react-redux": "^9.2.0",
+    "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
