@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { attendanceAPI } from "@/services/apiService";
-import { TableSkeleton } from "@/components/Skeleton";
+import { TableSkeleton, CardSkeleton } from "@/components/Skeleton";
 import toast from "react-hot-toast";
 
 interface AttendanceRecord {
