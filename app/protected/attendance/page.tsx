@@ -186,16 +186,6 @@ export default function AttendancePage() {
       </div>
     );
   }
-            <div key={i} className="bg-white rounded-xl shadow-lg p-6">
-              <div className="h-4 w-24 bg-gray-200 rounded animate-pulse mb-2"></div>
-              <div className="h-8 w-16 bg-gray-200 rounded animate-pulse"></div>
-            </div>
-          ))}
-        </div>
-        <TableSkeleton rows={8} columns={7} />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
