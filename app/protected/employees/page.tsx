@@ -8,6 +8,7 @@ import Modal from "@/components/Modal";
 import CloudinaryUpload from "@/components/CloudinaryUpload";
 import Input from "@/components/Input";
 import { employeeAPI } from "@/services/apiService";
+import { TableSkeleton } from "@/components/Skeleton";
 
 interface Employee {
   _id: string;

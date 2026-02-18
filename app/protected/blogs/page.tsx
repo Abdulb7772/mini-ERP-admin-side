@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import { blogAPI } from "@/services/apiService";
+import { TableSkeleton } from "@/components/Skeleton";
 
 interface Blog {
   _id: string;
