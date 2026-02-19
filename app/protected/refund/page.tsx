@@ -12,7 +12,7 @@ import {Skeleton} from '@/components/Skeleton';
 interface Order {
   _id: string;
   orderNumber: string;
-  userId: {
+  customerId: {
     _id: string;
     name: string;
     email: string;
@@ -272,7 +272,6 @@ export default function RefundManagementPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wallet Balance</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
                 </tr>
@@ -285,8 +284,8 @@ export default function RefundManagementPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm">
-                        <div className="font-medium text-gray-900">{order.userId?.name || 'N/A'}</div>
-                        <div className="text-gray-500">{order.userId?.email || 'N/A'}</div>
+                        <div className="font-medium text-gray-900">{order.customerId?.name || 'N/A'}</div>
+                        <div className="text-gray-500">{order.customerId?.email || 'N/A'}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -309,11 +308,7 @@ export default function RefundManagementPage() {
                         {order.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-blue-600">
-                        {order.walletBalance} points
-                      </div>
-                    </td>
+                    
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {formatDate(order.createdAt)}
                     </td>
@@ -379,7 +374,7 @@ export default function RefundManagementPage() {
                 </div>
                 <div>
                   <p className="text-gray-600">Customer</p>
-                  <p className="font-medium">{selectedOrder.userId?.name || 'N/A'}</p>
+                  <p className="font-medium">{selectedOrder.customerId?.name || 'N/A'}</p>
                 </div>
                 <div>
                   <p className="text-gray-600">Order Total</p>
