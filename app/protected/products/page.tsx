@@ -12,7 +12,7 @@ import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
 
 export default function ProductsPage() {
-  const { role } = useAuth(["admin", "manager"]);
+  const { role } = useAuth(["admin", "inventory_manager"]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);

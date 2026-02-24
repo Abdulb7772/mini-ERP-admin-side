@@ -41,7 +41,7 @@ interface Order {
 }
 
 export default function OrdersPage() {
-  useAuth(["admin", "manager", "staff"]);
+  useAuth(["admin", "order_manager", "staff"]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);

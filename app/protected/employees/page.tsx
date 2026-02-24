@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
@@ -23,6 +24,7 @@ interface Employee {
 }
 
 export default function EmployeesPage() {
+  useAuth(["admin", "employee_manager"]);
   const router = useRouter();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);

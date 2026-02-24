@@ -35,7 +35,7 @@ ChartJS.register(
 );
 
 export default function ReportsPage() {
-  useAuth(["admin", "manager"]);
+  useAuth(["admin", "report_manager"]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
   const [orders, setOrders] = useState<any[]>([]);

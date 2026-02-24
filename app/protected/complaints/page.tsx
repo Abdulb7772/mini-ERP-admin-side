@@ -52,7 +52,7 @@ interface ComplaintStats {
 }
 
 export default function ComplaintsPage() {
-  useAuth(["admin", "staff"]);
+  useAuth(["admin", "customer_manager", "staff"]);
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [stats, setStats] = useState<ComplaintStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -532,7 +532,7 @@ export default function ComplaintsPage() {
                             href={properUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block w-24 h-24 bg-gray-100 rounded border border-gray-300 hover:border-purple-500 transition flex flex-col items-center justify-center p-2 group"
+                            className="w-24 h-24 bg-gray-100 rounded border border-gray-300 hover:border-purple-500 transition flex flex-col items-center justify-center p-2 group"
                             title={`View ${fileExtension}`}
                           >
                             {isPDF ? (

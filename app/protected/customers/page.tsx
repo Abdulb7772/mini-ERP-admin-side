@@ -19,7 +19,7 @@ interface Customer {
 }
 
 export default function CustomersPage() {
-  useAuth(["admin", "manager"]);
+  useAuth(["admin", "customer_manager"]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);

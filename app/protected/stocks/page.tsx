@@ -23,7 +23,7 @@ interface StockItem {
 }
 
 export default function StocksPage() {
-  useAuth(["admin", "manager", "staff"]);
+  useAuth(["admin", "inventory_manager", "staff"]);
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);

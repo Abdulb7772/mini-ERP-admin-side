@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
@@ -20,6 +21,7 @@ interface Blog {
 }
 
 export default function BlogsPage() {
+  useAuth(["admin", "blog_manager"]);
   const router = useRouter();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);

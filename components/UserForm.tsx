@@ -2,15 +2,19 @@
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useEffect, useState } from "react";
 import Input from "./Input";
 import Button from "./Button";
 import Select from "./Select";
+import { ROLE_OPTIONS } from "@/utils/roles";
+import { teamAPI } from "@/services/apiService";
 
 interface UserFormProps {
   initialValues?: {
     name: string;
     email: string;
     role: string;
+    teams?: string[];
     password?: string;
   };
   onSubmit: (values: any) => Promise<void>;
@@ -25,7 +29,10 @@ const validationSchema = Yup.object({
     .email("Invalid email address")
     .required("Email is required"),
   role: Yup.string()
-    .oneOf(["admin", "manager", "staff"], "Invalid role")
+    .oneOf(
+      ["admin", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"],
+      "Invalid role"
+    )
     .required("Role is required"),
   password: Yup.string().when([], {
     is: () => false,
@@ -43,11 +50,31 @@ export default function UserForm({
     name: "",
     email: "",
     role: "staff",
+    teams: [],
     password: "",
   },
   onSubmit,
   isEditing = false,
 }: UserFormProps) {
+  const [teams, setTeams] = useState<any[]>([]);
+  const [loadingTeams, setLoadingTeams] = useState(true);
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
+  const fetchTeams = async () => {
+    try {
+      setLoadingTeams(true);
+      const response = await teamAPI.getTeams();
+      setTeams(response.data.data.filter((team: any) => team.isActive));
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    } finally {
+      setLoadingTeams(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema: isEditing
@@ -75,11 +102,13 @@ export default function UserForm({
     },
   });
 
-  const roleOptions = [
-    { value: "admin", label: "Admin" },
-    { value: "manager", label: "Manager" },
-    { value: "staff", label: "Staff" },
-  ];
+  const handleTeamToggle = (teamId: string) => {
+    const currentTeams = formik.values.teams || [];
+    const newTeams = currentTeams.includes(teamId)
+      ? currentTeams.filter((id: string) => id !== teamId)
+      : [...currentTeams, teamId];
+    formik.setFieldValue("teams", newTeams);
+  };
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
@@ -110,16 +139,54 @@ export default function UserForm({
       />
 
       {/* Role Select */}
-      <Select className="text-gray-800"
+      <Select 
+        className="text-gray-800"
         label="Role"
         name="role"
-        options={roleOptions}
+        options={ROLE_OPTIONS}
         value={formik.values.role}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched.role ? formik.errors.role : undefined}
         required
       />
+
+      {/* Teams Multi-Select */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Teams (Optional)
+        </label>
+        {loadingTeams ? (
+          <div className="text-sm text-gray-500">Loading teams...</div>
+        ) : teams.length === 0 ? (
+          <div className="text-sm text-gray-500">No teams available</div>
+        ) : (
+          <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-lg p-3">
+            {teams.map((team: any) => (
+              <label
+                key={team._id}
+                className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={formik.values.teams?.includes(team._id) || false}
+                  onChange={() => handleTeamToggle(team._id)}
+                  className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                />
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-gray-900">{team.name}</div>
+                  {team.description && (
+                    <div className="text-xs text-gray-500">{team.description}</div>
+                  )}
+                </div>
+              </label>
+            ))}
+          </div>
+        )}
+        <p className="mt-1 text-xs text-gray-500">
+          Select one or more teams for this user
+        </p>
+      </div>
 
       {/* Password Input */}
       <div>

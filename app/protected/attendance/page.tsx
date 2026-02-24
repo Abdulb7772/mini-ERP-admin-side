@@ -18,7 +18,7 @@ interface AttendanceRecord {
 }
 
 export default function AttendancePage() {
-  const { user: currentUser, role, status } = useAuth(["admin", "manager", "staff"]);
+  const { user: currentUser, role, status } = useAuth(["admin", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"]);
   const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -49,9 +49,9 @@ export default function AttendancePage() {
     }
   }, [currentUser]);
 
-  // Ensure staff users always view today's date
+  // Ensure non-privileged users always view today's date
   useEffect(() => {
-    if (role === "staff") {
+    if (role !== "admin" && role !== "employee_manager") {
       const today = new Date().toISOString().split("T")[0];
       setSelectedDate(today);
     }
@@ -67,15 +67,16 @@ export default function AttendancePage() {
   const fetchAttendance = async () => {
     try {
       setLoading(true);
-      // Staff users fetch only their own attendance
-      if (role === "staff") {
+      // Only admin and employee_manager can view all attendance
+      if (role === "admin" || role === "employee_manager") {
+        // Admin and employee_manager fetch all attendance records
+        const response = await attendanceAPI.getAttendanceByDate(selectedDate);
+        setAttendanceRecords(response.data.data);
+      } else {
+        // Other users fetch only their own attendance
         const response = await attendanceAPI.getMyAttendance(selectedDate);
         // Wrap single record in array for consistency
         setAttendanceRecords([response.data.data]);
-      } else {
-        // Admin and manager fetch all attendance records
-        const response = await attendanceAPI.getAttendanceByDate(selectedDate);
-        setAttendanceRecords(response.data.data);
       }
     } catch (error) {
       console.error("Error fetching attendance:", error);
@@ -150,8 +151,8 @@ export default function AttendancePage() {
       );
     });
 
-    // For staff, only show their own record
-    const accessible = role === "staff" 
+    // For non-privileged users, only show their own record
+    const accessible = (role !== "admin" && role !== "employee_manager")
       ? filtered.filter(record => record.userId === realUserId)
       : filtered;
 
@@ -201,7 +202,7 @@ export default function AttendancePage() {
               Current Time: {formatDateTime(currentDate)}
             </p>
           </div>
-          {role !== "staff" && (
+          {(role === "admin" || role === "employee_manager") && (
             <div className="flex flex-col">
               <label className="block text-sm font-medium mb-2">Select Date</label>
               <input
@@ -216,8 +217,8 @@ export default function AttendancePage() {
         </div>
       </div>
 
-      {/* Search Bar - Only for admin and manager */}
-      {role !== "staff" && (
+      {/* Search Bar - Only for admin and employee_manager */}
+      {(role === "admin" || role === "employee_manager") && (
         <div className="bg-white rounded-xl shadow-lg p-4">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -397,8 +398,8 @@ export default function AttendancePage() {
         </div>
       </div>
 
-      {/* Summary Stats - Only for admin and manager */}
-      {role !== "staff" && (
+      {/* Summary Stats - Only for admin and employee_manager */}
+      {(role === "admin" || role === "employee_manager") && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between">

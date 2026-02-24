@@ -139,3 +139,13 @@ export const reviewAPI = {
   addReply: (id: string, reply: string) => axiosInstance.post(`/reviews/${id}/reply`, { reply }),
   deleteReply: (id: string) => axiosInstance.delete(`/reviews/${id}/reply`),
 };
+
+// Team APIs
+export const teamAPI = {
+  getTeams: () => axiosInstance.get("/teams"),
+  getTeam: (id: string) => axiosInstance.get(`/teams/${id}`),
+  createTeam: (data: any) => axiosInstance.post("/teams", data),
+  updateTeam: (id: string, data: any) => axiosInstance.put(`/teams/${id}`, data),
+  deleteTeam: (id: string) => axiosInstance.delete(`/teams/${id}`),
+  toggleTeamStatus: (id: string) => axiosInstance.patch(`/teams/${id}/toggle-status`),
+};

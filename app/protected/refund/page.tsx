@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import axios from '@/services/axios';
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
@@ -49,6 +50,7 @@ interface RefundFormData {
 }
 
 export default function RefundManagementPage() {
+  useAuth(["admin", "order_manager"]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState<RefundStats | null>(null);
   const [loading, setLoading] = useState(true);

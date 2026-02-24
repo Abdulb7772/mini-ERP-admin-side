@@ -25,7 +25,7 @@ interface Notification {
 }
 
 export default function DashboardPage() {
-  useAuth(["admin", "manager", "staff"]);
+  useAuth(["admin", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);

@@ -11,7 +11,7 @@ import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
 
 export default function UsersPage() {
-  const { role } = useAuth(["admin", "manager"]);
+  const { role } = useAuth(["admin"]);
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -154,27 +154,25 @@ export default function UsersPage() {
             </select>
             <span className="text-sm text-gray-600">per page</span>
           </div>
-          {role === "admin" && (
-            <Button
-              onClick={handleAddNew}
-              className="bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2"
+          <Button
+            onClick={handleAddNew}
+            className="bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              <span>Add User</span>
-            </Button>
-          )}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            <span>Add User</span>
+          </Button>
         </div>
       </div>
 
@@ -188,6 +186,7 @@ export default function UsersPage() {
                 <th className="px-6 py-4 text-left text-sm font-semibold">Name</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Email</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Role</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold">Teams</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Verified</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Status</th>
                 <th className="px-6 py-4 text-center text-sm font-semibold">Actions</th>
@@ -221,13 +220,29 @@ export default function UsersPage() {
                         className={`inline-block px-3 py-1 text-xs rounded-full font-semibold ${
                           user.role === "admin"
                             ? "bg-purple-100 text-purple-800"
-                            : user.role === "manager"
+                            : user.role.includes("_manager")
                             ? "bg-blue-100 text-blue-800"
                             : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {user.role}
+                        {user.role.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
                       </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      {user.teams && user.teams.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {user.teams.map((team: any) => (
+                            <span
+                              key={typeof team === "string" ? team : team._id}
+                              className="inline-block px-2 py-1 text-xs rounded-full bg-indigo-100 text-indigo-800 font-medium"
+                            >
+                              {typeof team === "string" ? team : team.name}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-sm text-gray-400 italic">No teams</span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       {user.isVerified ? (
@@ -264,12 +279,7 @@ export default function UsersPage() {
                       <select
                         value={user.isActive ? "active" : "inactive"}
                         onChange={() => handleToggleStatus(user._id)}
-                        disabled={role === "manager"}
-                        className={`px-3 py-1 text-sm rounded-lg border-2 font-medium transition-colors ${
-                          role === "manager" 
-                            ? "cursor-not-allowed opacity-60" 
-                            : "cursor-pointer"
-                        } ${
+                        className={`px-3 py-1 text-sm rounded-lg border-2 font-medium transition-colors cursor-pointer ${
                           user.isActive
                             ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
                             : "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
@@ -281,51 +291,44 @@ export default function UsersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center space-x-2">
-                        {role === "admin" && (
-                          <>
-                            <button
-                              onClick={() => handleEdit(user)}
-                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                              title="Edit"
-                            >
-                              <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                />
-                              </svg>
-                            </button>
-                            <button
-                              onClick={() => handleDelete(user._id)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                              title="Delete"
-                            >
-                              <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                            </button>
-                          </>
-                        )}
-                        {role === "manager" && (
-                          <span className="text-sm text-gray-500 italic">View only</span>
-                        )}
+                        <button
+                          onClick={() => handleEdit(user)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => handleDelete(user._id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -381,6 +384,9 @@ export default function UsersPage() {
                     name: editingUser.name,
                     email: editingUser.email,
                     role: editingUser.role,
+                    teams: editingUser.teams?.map((team: any) => 
+                      typeof team === "string" ? team : team._id
+                    ) || [],
                     password: "",
                   }
                 : undefined

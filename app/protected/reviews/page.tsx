@@ -44,7 +44,7 @@ interface Review {
 }
 
 export default function ReviewsPage() {
-  useAuth(["admin", "manager"]);
+  useAuth(["admin", "customer_manager"]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);

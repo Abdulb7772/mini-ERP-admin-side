@@ -118,7 +118,7 @@ export default function RegisterPage() {
 
             {/* Form */}
             <form onSubmit={formik.handleSubmit} className="space-y-4 mb-1 text-gray-900">
-              <Input className="text-white"
+              <Input className="text-gray-900"
                 label="Full Name"
                 placeholder="Full Name"
                 type="text"
@@ -130,7 +130,7 @@ export default function RegisterPage() {
                 error={formik.touched.name && formik.errors.name ? formik.errors.name : undefined}
               />
 
-              <Input className="text-white"
+              <Input className="text-gray-900"
                 label="Email"
                 placeholder="example@xyz.com"
                 type="email"
@@ -142,7 +142,7 @@ export default function RegisterPage() {
                 error={formik.touched.email && formik.errors.email ? formik.errors.email : undefined}
               />
 
-              <Input className="text-white"
+              <Input className="text-gray-900"
                 label="Password"
                 placeholder="Enter your password"
                 type="password"
@@ -154,7 +154,7 @@ export default function RegisterPage() {
                 error={formik.touched.password && formik.errors.password ? formik.errors.password : undefined}
               />
 
-              <Input className="text-white"
+              <Input className="text-gray-900"
                 label="Confirm Password"
                 placeholder="Rewrite your Password"
                 type="password"
@@ -166,7 +166,7 @@ export default function RegisterPage() {
                 error={formik.touched.confirmPassword && formik.errors.confirmPassword ? formik.errors.confirmPassword : undefined}
               />
 
-              <Input className="text-white"
+              <Input className="text-gray-900"
                 label="Phone Number"
                 placeholder="Enter your phone number"
                 type="tel"
@@ -178,7 +178,7 @@ export default function RegisterPage() {
                 error={formik.touched.phone && formik.errors.phone ? formik.errors.phone : undefined}
               />
 
-              <Input className="text-white"
+              <Input className="text-gray-900"
                 label="Delivery Address"
                 placeholder="Enter your delivery address"
                 type="text"
