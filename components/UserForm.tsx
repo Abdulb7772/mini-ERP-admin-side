@@ -30,7 +30,7 @@ const validationSchema = Yup.object({
     .required("Email is required"),
   role: Yup.string()
     .oneOf(
-      ["admin", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"],
+      ["admin", "top_manager", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"],
       "Invalid role"
     )
     .required("Role is required"),

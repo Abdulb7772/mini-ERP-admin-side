@@ -195,6 +195,9 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
       mergeStaffWithChats(staffMembers);
     } else if (activeTab === "teams" && teams.length > 0) {
       mergeTeamsWithChats(teams);
+    } else {
+      // Clear allUsers when switching to external or all tabs
+      setAllUsers([]);
     }
   }, [chats, staffMembers, teams, activeTab]);
 
@@ -738,7 +741,7 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
                             <div
                               className={`min-w-50 max-w-[70%] rounded-2xl p-4 shadow-md wrap-break-words ${
                                 message.senderId === session?.user?.id
-                                  ? "bg-linear-to-br from-blue-500 to-blue-600 text-white"
+                                  ? "bg-linear-to-br from-purple-500 to-pink-600 text-white"
                                   : "bg-white border border-gray-200 text-gray-900"
                               }`}
                             >
@@ -750,7 +753,7 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
                                 <div 
                                   className={`mt-2 p-2 rounded-lg border cursor-pointer hover:opacity-80 transition ${
                                     message.senderId === session?.user?.id
-                                      ? "bg-blue-400 border-blue-300"
+                                      ? "bg-purple-400 border-purple-300"
                                       : "bg-gray-100 border-gray-300"
                                   }`}
                                   onClick={() => setDetailsModal({ 

@@ -41,73 +41,73 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       name: "Dashboard", 
       href: "/protected/dashboard", 
       icon: "📊", 
-      roles: ["admin", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"] 
+      roles: ["admin", "top_manager", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"] 
     },
     { 
       name: "Products", 
       href: "/protected/products", 
       icon: "📦", 
-      roles: ["admin", "inventory_manager"] 
+      roles: ["admin", "top_manager", "inventory_manager"] 
     },
     { 
       name: "Stocks", 
       href: "/protected/stocks", 
       icon: "📈", 
-      roles: ["admin", "inventory_manager", "staff"] 
+      roles: ["admin", "top_manager", "inventory_manager", "staff"] 
     },
     { 
       name: "Orders", 
       href: "/protected/orders", 
       icon: "🛒", 
-      roles: ["admin", "order_manager", "staff"] 
+      roles: ["admin", "top_manager", "order_manager", "staff"] 
     },
     { 
       name: "Refund", 
       href: "/protected/refund", 
       icon: "💰", 
-      roles: ["admin", "order_manager"] 
+      roles: ["admin", "top_manager", "order_manager"] 
     },
     { 
       name: "Customers", 
       href: "/protected/customers", 
       icon: "👤", 
-      roles: ["admin", "customer_manager"] 
+      roles: ["admin", "top_manager", "customer_manager"] 
     },
     { 
       name: "Reviews", 
       href: "/protected/reviews", 
       icon: "⭐", 
-      roles: ["admin", "customer_manager"] 
+      roles: ["admin", "top_manager", "customer_manager"] 
     },
     { 
       name: "Complaints", 
       href: "/protected/complaints", 
       icon: "⚠️", 
-      roles: ["admin", "customer_manager", "staff"] 
+      roles: ["admin", "top_manager", "customer_manager", "staff"] 
     },
     { 
       name: "Attendance", 
       href: "/protected/attendance", 
       icon: "📅", 
-      roles: ["admin", "employee_manager", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"] 
+      roles: ["admin", "top_manager", "employee_manager", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"] 
     },
     { 
       name: "Reports", 
       href: "/protected/reports", 
       icon: "📋", 
-      roles: ["admin", "report_manager"] 
+      roles: ["admin", "top_manager", "report_manager"] 
     },
     { 
       name: "Users", 
       href: "/protected/users", 
       icon: "👥", 
-      roles: ["admin"] 
+      roles: ["admin", "top_manager"] 
     },
     { 
       name: "Teams", 
       href: "/protected/teams", 
       icon: "👨‍👩‍👧‍👦", 
-      roles: ["admin"] 
+      roles: ["admin", "top_manager"] 
     },
     { 
       name: "About Us", 
@@ -119,13 +119,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       name: "Blogs", 
       href: "/protected/blogs", 
       icon: "📝", 
-      roles: ["admin", "blog_manager"] 
+      roles: ["admin", "top_manager", "blog_manager"] 
     },
     { 
       name: "Employees", 
       href: "/protected/employees", 
       icon: "👔", 
-      roles: ["admin", "employee_manager"] 
+      roles: ["admin", "top_manager", "employee_manager"] 
     },
   ];
 

@@ -11,7 +11,7 @@ import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
 
 export default function UsersPage() {
-  const { role } = useAuth(["admin"]);
+  const { role } = useAuth(["admin", "top_manager"]);
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -154,25 +154,27 @@ export default function UsersPage() {
             </select>
             <span className="text-sm text-gray-600">per page</span>
           </div>
-          <Button
-            onClick={handleAddNew}
-            className="bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {role === "admin" && (
+            <Button
+              onClick={handleAddNew}
+              className="bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            <span>Add User</span>
-          </Button>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              <span>Add User</span>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -276,21 +278,32 @@ export default function UsersPage() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <select
-                        value={user.isActive ? "active" : "inactive"}
-                        onChange={() => handleToggleStatus(user._id)}
-                        className={`px-3 py-1 text-sm rounded-lg border-2 font-medium transition-colors cursor-pointer ${
+                      {role === "admin" ? (
+                        <select
+                          value={user.isActive ? "active" : "inactive"}
+                          onChange={() => handleToggleStatus(user._id)}
+                          className={`px-3 py-1 text-sm rounded-lg border-2 font-medium transition-colors cursor-pointer ${
+                            user.isActive
+                              ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                              : "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                          }`}
+                        >
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                        </select>
+                      ) : (
+                        <span className={`px-3 py-1 text-sm rounded-lg inline-block ${
                           user.isActive
-                            ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
-                            : "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                        }`}
-                      >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                      </select>
+                            ? "bg-green-50 text-green-700"
+                            : "bg-red-50 text-red-700"
+                        }`}>
+                          {user.isActive ? "Active" : "Inactive"}
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center justify-center space-x-2">
+                      {role === "admin" ? (
+                        <div className="flex items-center justify-center space-x-2">
                         <button
                           onClick={() => handleEdit(user)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -330,6 +343,9 @@ export default function UsersPage() {
                           </svg>
                         </button>
                       </div>
+                      ) : (
+                        <span className="text-sm text-gray-500">View only</span>
+                      )}
                     </td>
                   </tr>
                 ))
