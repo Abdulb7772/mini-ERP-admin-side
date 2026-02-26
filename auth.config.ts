@@ -11,7 +11,6 @@ export const authConfig = {
       const userRole = auth?.user?.role;
       const isOnProtected = nextUrl.pathname.startsWith("/protected");
       const isOnLogin = nextUrl.pathname.startsWith("/login");
-      const isOnRegister = nextUrl.pathname.startsWith("/register");
       const isOnProducts = nextUrl.pathname === "/products";
 
       // Allow access to protected routes only for authenticated users
@@ -26,7 +25,7 @@ export const authConfig = {
         return true;
       }
       
-      // Allow access to login/register pages and other public pages
+      // Allow access to login page and other public pages
       return true;
     },
   },

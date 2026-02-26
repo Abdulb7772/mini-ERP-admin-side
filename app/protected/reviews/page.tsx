@@ -8,6 +8,7 @@ import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
 import TiptapEditor from "@/components/TiptapEditor";
+import { confirmToast } from "@/utils/confirmToast";
 
 interface Review {
   _id: string;
@@ -86,16 +87,20 @@ export default function ReviewsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this review?")) return;
-
-    try {
-      await reviewAPI.deleteReview(id);
-      toast.success("Review deleted successfully");
-      fetchReviews();
-    } catch (error) {
-      console.error("Error deleting review:", error);
-      toast.error("Failed to delete review");
-    }
+    confirmToast({
+      title: "Delete Review",
+      message: "Are you sure you want to delete this review?",
+      onConfirm: async () => {
+        try {
+          await reviewAPI.deleteReview(id);
+          toast.success("Review deleted successfully");
+          fetchReviews();
+        } catch (error) {
+          console.error("Error deleting review:", error);
+          toast.error("Failed to delete review");
+        }
+      },
+    });
   };
 
   const handleAddReply = async () => {
@@ -125,22 +130,28 @@ export default function ReviewsPage() {
   };
 
   const handleDeleteReply = async () => {
-    if (!selectedReview || !confirm("Are you sure you want to delete this reply?")) return;
+    if (!selectedReview) return;
 
-    try {
-      setReplySubmitting(true);
-      await reviewAPI.deleteReply(selectedReview._id);
-      toast.success("Reply deleted successfully");
-      setShowModal(false);
-      setSelectedReview(null);
-      setReplyText("");
-      fetchReviews();
-    } catch (error: any) {
-      console.error("Error deleting reply:", error);
-      toast.error(error.response?.data?.message || "Failed to delete reply");
-    } finally {
-      setReplySubmitting(false);
-    }
+    confirmToast({
+      title: "Delete Reply",
+      message: "Are you sure you want to delete this reply?",
+      onConfirm: async () => {
+        try {
+          setReplySubmitting(true);
+          await reviewAPI.deleteReply(selectedReview._id);
+          toast.success("Reply deleted successfully");
+          setShowModal(false);
+          setSelectedReview(null);
+          setReplyText("");
+          fetchReviews();
+        } catch (error: any) {
+          console.error("Error deleting reply:", error);
+          toast.error(error.response?.data?.message || "Failed to delete reply");
+        } finally {
+          setReplySubmitting(false);
+        }
+      },
+    });
   };
 
   const getStatusColor = (status: string) => {

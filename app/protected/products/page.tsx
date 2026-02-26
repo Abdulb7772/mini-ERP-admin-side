@@ -10,6 +10,7 @@ import ProductDetailsModal from "@/components/ProductDetailsModal";
 import { TableSkeleton } from "@/components/Skeleton";
 import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
+import { confirmToast } from "@/utils/confirmToast";
 
 export default function ProductsPage() {
   const { role } = useAuth(["admin", "inventory_manager"]);
@@ -55,14 +56,20 @@ export default function ProductsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this product?")) {
-      try {
-        await productAPI.deleteProduct(id);
-        fetchProducts();
-      } catch (error) {
-        console.error("Error deleting product:", error);
-      }
-    }
+    confirmToast({
+      title: "Delete Product",
+      message: "Are you sure you want to delete this product?",
+      onConfirm: async () => {
+        try {
+          await productAPI.deleteProduct(id);
+          toast.success("Product deleted successfully!");
+          fetchProducts();
+        } catch (error) {
+          console.error("Error deleting product:", error);
+          toast.error("Failed to delete product");
+        }
+      },
+    });
   };
 
   const handleAddNew = () => {

@@ -143,17 +143,6 @@ function LoginForm() {
                   Sign in
                 </Button>
               </form>
-
-              {/* Footer */}
-              <p className="text-center text-sm text-gray-200 mb-4">
-                Don't have an account?{" "}
-                <Link
-                  href="/register"
-                  className="font-medium text-blue-900 hover:text-indigo-700"
-                >
-                  Create Account
-                </Link>
-              </p>
             </motion.div>
           </div>
         </div>

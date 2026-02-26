@@ -17,7 +17,6 @@ import {
   offNewMessage,
   offTypingUpdate,
   offMessagesRead,
-  disconnectSocket,
   onChatUpdated,
   offChatUpdated,
 } from "@/services/socketService";
@@ -25,6 +24,8 @@ import Button from "./Button";
 import Input from "./Input";
 import AttachmentSelector from "./AttachmentSelector";
 import AttachmentDetailsModal from "./AttachmentDetailsModal";
+import toast from "react-hot-toast";
+import { confirmToast } from "@/utils/confirmToast";
 
 interface Chat {
   _id: string;
@@ -38,6 +39,7 @@ interface Chat {
   lastMessage?: string;
   lastMessageAt?: string;
   myUnreadCount?: number;
+  unreadCount?: number;
 }
 
 interface Message {
@@ -89,27 +91,53 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
     message: null
   });
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const initializedRef = useRef(false);
+  const selectedChatRef = useRef<Chat | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Keep ref in sync with state
+  useEffect(() => {
+    selectedChatRef.current = selectedChat;
+  }, [selectedChat]);
+
   // Initialize Socket.IO
   useEffect(() => {
-    if (session?.user?.accessToken && isOpen) {
-      const socket = initializeSocket(session.user.accessToken);
+    if (session?.user?.accessToken && isOpen && !initializedRef.current) {
+      initializedRef.current = true;
+      initializeSocket(session.user.accessToken);
 
-      // Set up socket listeners
-      onNewMessage((data: { chatId: string; message: Message }) => {
-        if (data.chatId === selectedChat?._id) {
+      const handleNewMessage = (data: { chatId: string; message: Message }) => {
+        if (data.chatId === selectedChatRef.current?._id) {
           setMessages((prev) => [...prev, data.message]);
           markMessagesAsRead(data.chatId);
+          setChats((prev) =>
+            prev.map((chat) =>
+              chat._id === data.chatId
+                ? { ...chat, myUnreadCount: 0, unreadCount: 0 }
+                : chat
+            )
+          );
+        } else {
+          setChats((prev) =>
+            prev.map((chat) =>
+              chat._id === data.chatId
+                ? {
+                    ...chat,
+                    myUnreadCount: getUnreadCount(chat) + 1,
+                    unreadCount: getUnreadCount(chat) + 1,
+                  }
+                : chat
+            )
+          );
         }
         // Update chat list
         fetchChats();
-      });
+      };
 
-      onTypingUpdate((data: { chatId: string; userId: string; userName: string; isTyping: boolean }) => {
-        if (data.chatId === selectedChat?._id && data.userId !== session.user.id) {
+      const handleTypingUpdate = (data: { chatId: string; userId: string; userName: string; isTyping: boolean }) => {
+        if (data.chatId === selectedChatRef.current?._id && data.userId !== session.user.id) {
           setTypingUsers((prev) => {
             const newSet = new Set(prev);
             if (data.isTyping) {
@@ -120,10 +148,10 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
             return newSet;
           });
         }
-      });
+      };
 
-      onMessagesRead((data: { chatId: string; userId: string }) => {
-        if (data.chatId === selectedChat?._id) {
+      const handleMessagesRead = (data: { chatId: string; userId: string }) => {
+        if (data.chatId === selectedChatRef.current?._id) {
           setMessages((prev) =>
             prev.map((msg) => ({
               ...msg,
@@ -131,23 +159,27 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
             }))
           );
         }
-      });
+      };
 
-      onChatUpdated(() => {
+      const handleChatUpdated = () => {
         fetchChats();
-      });
+      };
+
+      // Set up socket listeners
+      onNewMessage(handleNewMessage);
+      onTypingUpdate(handleTypingUpdate);
+      onMessagesRead(handleMessagesRead);
+      onChatUpdated(handleChatUpdated);
 
       return () => {
-        offNewMessage();
-        offTypingUpdate();
-        offMessagesRead();
-        offChatUpdated();
-        if (!isOpen) {
-          disconnectSocket();
-        }
+        offNewMessage(handleNewMessage);
+        offTypingUpdate(handleTypingUpdate);
+        offMessagesRead(handleMessagesRead);
+        offChatUpdated(handleChatUpdated);
+        initializedRef.current = false;
       };
     }
-  }, [session, isOpen, selectedChat]);
+  }, [session?.user?.accessToken, session?.user?.id, isOpen]);
 
   // Fetch chats
   const fetchChats = async () => {
@@ -178,6 +210,24 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
     }
   };
 
+  const getUnreadCount = (chat: Chat) => {
+    if (typeof chat?.myUnreadCount === "number") return chat.myUnreadCount;
+    if (typeof chat?.unreadCount === "number") return chat.unreadCount;
+    return 0;
+  };
+
+  const formatChatListTime = (chat: Chat) => {
+    const timeValue = chat.lastMessageAt;
+
+    if (!timeValue) return "";
+
+    return new Date(timeValue).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
   useEffect(() => {
     if (isOpen) {
       fetchChats();
@@ -195,9 +245,6 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
       mergeStaffWithChats(staffMembers);
     } else if (activeTab === "teams" && teams.length > 0) {
       mergeTeamsWithChats(teams);
-    } else {
-      // Clear allUsers when switching to external or all tabs
-      setAllUsers([]);
     }
   }, [chats, staffMembers, teams, activeTab]);
 
@@ -306,6 +353,12 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
 
   // Select chat
   const handleSelectChat = async (chat: any) => {
+    const previousChatId = selectedChatRef.current?._id;
+
+    if (previousChatId && previousChatId !== chat._id) {
+      leaveChat(previousChatId);
+    }
+
     // If this is a potential team (team without existing chat), create group chat
     if (chat.isPotentialTeam) {
       setLoading(true);
@@ -404,6 +457,13 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
       // Mark as read
       await axiosInstance.patch(`/chats/${chat._id}/read`);
       markMessagesAsRead(chat._id);
+      setChats((prev) =>
+        prev.map((item) =>
+          item._id === chat._id
+            ? { ...item, myUnreadCount: 0, unreadCount: 0 }
+            : item
+        )
+      );
 
       // Update chat list
       fetchChats();
@@ -475,11 +535,11 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
   // Leave chat on unmount
   useEffect(() => {
     return () => {
-      if (selectedChat) {
-        leaveChat(selectedChat._id);
+      if (selectedChatRef.current?._id) {
+        leaveChat(selectedChatRef.current._id);
       }
     };
-  }, [selectedChat]);
+  }, []);
 
   const handleAttachmentSelect = (id: string) => {
     setContextType(attachmentType);
@@ -488,16 +548,49 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
   };
 
   const handleDeleteMessage = async (messageId: string) => {
-    if (!confirm("Are you sure you want to delete this message?")) return;
-    
-    try {
-      await axiosInstance.delete(`/chats/messages/${messageId}`);
-      setMessages((prev) => prev.filter((msg) => msg._id !== messageId));
-      setOpenDropdownId(null);
-    } catch (error) {
-      console.error("Error deleting message:", error);
-      alert("Failed to delete message. Please try again.");
-    }
+    confirmToast({
+      title: "Delete Message",
+      message: "Are you sure you want to delete this message?",
+      onConfirm: async () => {
+        try {
+          await axiosInstance.delete(`/chats/messages/${messageId}`);
+          setMessages((prev) => prev.filter((msg) => msg._id !== messageId));
+          setOpenDropdownId(null);
+          toast.success("Message deleted successfully");
+        } catch (error) {
+          console.error("Error deleting message:", error);
+          toast.error("Failed to delete message. Please try again.");
+        }
+      },
+    });
+  };
+
+  const handleDeleteChat = (chatId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    confirmToast({
+      title: "Delete Chat",
+      message: "Are you sure you want to delete this chat? This action cannot be undone.",
+      onConfirm: async () => {
+        try {
+          await axiosInstance.delete(`/chats/${chatId}`);
+
+          setChats((prev) => prev.filter((chat) => chat._id !== chatId));
+          setAllUsers((prev) => prev.filter((chat: any) => chat._id !== chatId));
+
+          if (selectedChatRef.current?._id === chatId) {
+            leaveChat(chatId);
+            setSelectedChat(null);
+            setMessages([]);
+          }
+
+          toast.success("Chat deleted successfully");
+        } catch (error) {
+          console.error("Error deleting chat:", error);
+          toast.error("Failed to delete chat. Please try again.");
+        }
+      },
+    });
   };
 
   const handleShowMessageInfo = (message: Message) => {
@@ -621,13 +714,13 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
                     <div
                       key={chat._id}
                       onClick={() => handleSelectChat(chat)}
-                      className={`p-4 border-b border-gray-100 cursor-pointer transition-all duration-200 ${
+                      className={`relative group p-4 border-b border-gray-100 cursor-pointer transition-all duration-200 ${
                         selectedChat?._id === chat._id 
                           ? "bg-white shadow-md scale-[1.02] border-l-4 border-l-blue-500" 
                           : "hover:bg-white hover:shadow-sm"
                       }`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
                           <div className="relative">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ${
@@ -658,11 +751,29 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
                             </p>
                           </div>
                         </div>
-                        {chat.myUnreadCount && chat.myUnreadCount > 0 && (
-                          <span className="bg-linear-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full px-2.5 py-1 shadow-lg animate-pulse">
-                            {chat.myUnreadCount}
-                          </span>
-                        )}
+                        <div className="flex flex-col items-end gap-1">
+                          <div className="flex items-center gap-1.5">
+                            <span className={`text-white text-xs font-bold rounded-full px-2.5 py-1 ${getUnreadCount(chat) > 0 ? "bg-red-500" : "bg-black"}`}>
+                              {getUnreadCount(chat)}
+                            </span>
+
+                            {!chat.isPotential && !chat.isPotentialTeam && (
+                              <button
+                                onClick={(event) => handleDeleteChat(chat._id, event)}
+                                className="p-1.5 text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                                title="Delete chat"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            )}
+                          </div>
+
+                          {formatChatListTime(chat) && (
+                            <span className="text-xs text-gray-500">{formatChatListTime(chat)}</span>
+                          )}
+                        </div>
                       </div>
                       <p className="text-sm text-gray-600 truncate ml-15 mt-2">
                         {chat.lastMessage || (chat.isPotential || chat.isPotentialTeam ? "✨ Start a conversation" : "No messages yet")}
@@ -677,6 +788,7 @@ export default function ChatModal({ isOpen, onClose }: ChatModalProps) {
                           📎 {chat.contextType}: {chat.contextId?.orderNumber || chat.contextId?.name || "N/A"}
                         </span>
                       )}
+
                     </div>
                   ))}
                 </>

@@ -9,6 +9,7 @@ import UserForm from "@/components/UserForm";
 import { TableSkeleton } from "@/components/Skeleton";
 import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
+import { confirmToast } from "@/utils/confirmToast";
 
 export default function UsersPage() {
   const { role } = useAuth(["admin", "top_manager"]);
@@ -46,14 +47,20 @@ export default function UsersPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
-      try {
-        await userAPI.deleteUser(id);
-        fetchUsers();
-      } catch (error) {
-        console.error("Error deleting user:", error);
-      }
-    }
+    confirmToast({
+      title: "Delete User",
+      message: "Are you sure you want to delete this user? This action cannot be undone.",
+      onConfirm: async () => {
+        try {
+          await userAPI.deleteUser(id);
+          fetchUsers();
+          toast.success("User deleted successfully!");
+        } catch (error) {
+          console.error("Error deleting user:", error);
+          toast.error("Failed to delete user");
+        }
+      },
+    });
   };
 
   const handleToggleStatus = async (id: string) => {

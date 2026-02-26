@@ -41,32 +41,6 @@ export const login = createAsyncThunk(
   }
 );
 
-export const register = createAsyncThunk(
-  "auth/register",
-  async (
-    {
-      name,
-      email,
-      password,
-      role,
-    }: { name: string; email: string; password: string; role?: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response = await authAPI.register(name, email, password, role);
-      const { user, token } = response.data.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      toast.success("Registration successful!");
-      return { user, token };
-    } catch (error: any) {
-      const message = error.response?.data?.message || "Registration failed";
-      toast.error(message);
-      return rejectWithValue(message);
-    }
-  }
-);
-
 export const getMe = createAsyncThunk(
   "auth/getMe",
   async (_, { rejectWithValue }) => {
@@ -108,20 +82,6 @@ const authSlice = createSlice({
         state.token = action.payload.token;
       })
       .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      // Register
-      .addCase(register.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(register.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-      })
-      .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

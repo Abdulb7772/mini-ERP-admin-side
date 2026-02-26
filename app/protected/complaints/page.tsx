@@ -8,6 +8,7 @@ import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
 import TiptapEditor from "@/components/TiptapEditor";
+import { confirmToast } from "@/utils/confirmToast";
 
 interface Complaint {
   _id: string;
@@ -165,17 +166,21 @@ export default function ComplaintsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this complaint?")) return;
-
-    try {
-      await complaintAPI.deleteComplaint(id);
-      toast.success("Complaint deleted successfully");
-      fetchComplaints();
-      fetchStats();
-    } catch (error) {
-      console.error("Error deleting complaint:", error);
-      toast.error("Failed to delete complaint");
-    }
+    confirmToast({
+      title: "Delete Complaint",
+      message: "Are you sure you want to delete this complaint?",
+      onConfirm: async () => {
+        try {
+          await complaintAPI.deleteComplaint(id);
+          toast.success("Complaint deleted successfully");
+          fetchComplaints();
+          fetchStats();
+        } catch (error) {
+          console.error("Error deleting complaint:", error);
+          toast.error("Failed to delete complaint");
+        }
+      },
+    });
   };
 
   const getStatusColor = (status: string) => {

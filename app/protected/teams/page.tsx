@@ -9,6 +9,7 @@ import Input from "@/components/Input";
 import { TableSkeleton } from "@/components/Skeleton";
 import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
+import { confirmToast } from "@/utils/confirmToast";
 
 export default function TeamsPage() {
   const { role } = useAuth(["admin", "top_manager"]);
@@ -83,16 +84,20 @@ export default function TeamsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this team? This action cannot be undone.")) {
-      try {
-        await teamAPI.deleteTeam(id);
-        toast.success("Team deleted successfully!");
-        fetchTeams();
-      } catch (error) {
-        console.error("Error deleting team:", error);
-        toast.error("Failed to delete team");
-      }
-    }
+    confirmToast({
+      title: "Delete Team",
+      message: "Are you sure you want to delete this team? This action cannot be undone.",
+      onConfirm: async () => {
+        try {
+          await teamAPI.deleteTeam(id);
+          toast.success("Team deleted successfully!");
+          fetchTeams();
+        } catch (error) {
+          console.error("Error deleting team:", error);
+          toast.error("Failed to delete team");
+        }
+      },
+    });
   };
 
   const handleToggleStatus = async (id: string) => {

@@ -7,6 +7,7 @@ import Modal from "@/components/Modal";
 import { TableSkeleton } from "@/components/Skeleton";
 import Pagination from "@/components/Pagination";
 import toast from "react-hot-toast";
+import { confirmToast } from "@/utils/confirmToast";
 
 interface Customer {
   _id: string;
@@ -83,18 +84,20 @@ export default function CustomersPage() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete customer "${name}"? This action cannot be undone.`)) {
-      return;
-    }
-    
-    try {
-      await customerAPI.deleteCustomer(id);
-      toast.success("Customer deleted successfully!");
-      fetchCustomers();
-    } catch (error) {
-      console.error("Error deleting customer:", error);
-      toast.error("Failed to delete customer");
-    }
+    confirmToast({
+      title: "Delete Customer",
+      message: `Are you sure you want to delete customer "${name}"? This action cannot be undone.`,
+      onConfirm: async () => {
+        try {
+          await customerAPI.deleteCustomer(id);
+          toast.success("Customer deleted successfully!");
+          fetchCustomers();
+        } catch (error) {
+          console.error("Error deleting customer:", error);
+          toast.error("Failed to delete customer");
+        }
+      },
+    });
   };
 
   const handleCloseModal = () => {

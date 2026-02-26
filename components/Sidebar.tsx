@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import ChatModal from "./ChatModal";
 import axiosInstance from "@/services/axios";
 
 interface SidebarProps {
@@ -16,7 +15,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user;
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
@@ -178,29 +176,26 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Chat Button */}
       <div className="px-2 pb-4 border-t border-gray-800 pt-4">
-        <button
-          onClick={() => setIsChatOpen(true)}
-          className="w-full text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors relative"
-          title={!isOpen ? "Chat" : undefined}
+        <Link
+          href="/protected/messages"
+          className={`w-full ${
+            pathname === "/protected/messages"
+              ? "bg-gray-800 text-white"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white"
+          } group flex items-center ${
+            isOpen ? "px-3" : "px-0 justify-center"
+          } py-2 text-sm font-medium rounded-md transition-colors relative`}
+          title={!isOpen ? "Messages" : undefined}
         >
           <span className={`text-2xl ${isOpen ? "mr-3" : ""}`}>💬</span>
-          {isOpen && <span>Chat</span>}
+          {isOpen && <span>Messages</span>}
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-linear-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse shadow-lg">
+            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse shadow-lg">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
-        </button>
+        </Link>
       </div>
-
-      {/* Chat Modal */}
-      <ChatModal 
-        isOpen={isChatOpen} 
-        onClose={() => {
-          setIsChatOpen(false);
-          fetchUnreadCount();
-        }} 
-      />
       </nav>
     </div>
   );

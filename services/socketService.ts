@@ -115,34 +115,66 @@ export const onOnlineUsersList = (callback: (users: string[]) => void) => {
 };
 
 // Remove listeners
-export const offNewMessage = () => {
+export const offNewMessage = (callback?: (data: any) => void) => {
+  if (callback) {
+    socket?.off("message:new", callback);
+    return;
+  }
   socket?.off("message:new");
 };
 
-export const offChatUpdated = () => {
+export const offChatUpdated = (callback?: (data: any) => void) => {
+  if (callback) {
+    socket?.off("chat:updated", callback);
+    return;
+  }
   socket?.off("chat:updated");
 };
 
-export const offTypingUpdate = () => {
+export const offTypingUpdate = (callback?: (data: any) => void) => {
+  if (callback) {
+    socket?.off("typing:update", callback);
+    return;
+  }
   socket?.off("typing:update");
 };
 
-export const offUserOnline = () => {
+export const offUserOnline = (callback?: (data: any) => void) => {
+  if (callback) {
+    socket?.off("user:online", callback);
+    return;
+  }
   socket?.off("user:online");
 };
 
-export const offUserOffline = () => {
+export const offUserOffline = (callback?: (data: any) => void) => {
+  if (callback) {
+    socket?.off("user:offline", callback);
+    return;
+  }
   socket?.off("user:offline");
 };
 
-export const offMessagesRead = () => {
+export const offMessagesRead = (callback?: (data: any) => void) => {
+  if (callback) {
+    socket?.off("messages:read", callback);
+    return;
+  }
   socket?.off("messages:read");
 };
 
-export const offMessageStatus = () => {
+export const offMessageStatus = (callback?: (data: any) => void) => {
+  if (callback) {
+    socket?.off("message:status", callback);
+    return;
+  }
   socket?.off("message:status");
 };
 
-export const offOnlineUsersList = () => {
+export const offOnlineUsersList = (callback?: (users: string[]) => void) => {
+  if (callback) {
+    socket?.off("users:online:list", callback);
+    return;
+  }
   socket?.off("users:online:list");
 };

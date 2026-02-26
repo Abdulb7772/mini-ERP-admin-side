@@ -5,9 +5,6 @@ export const authAPI = {
   login: (email: string, password: string) =>
     axiosInstance.post("/auth/login", { email, password }),
   
-  register: (name: string, email: string, password: string, role?: string) =>
-    axiosInstance.post("/auth/register", { name, email, password, role }),
-  
   getMe: () => axiosInstance.get("/auth/me"),
 };
 
