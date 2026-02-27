@@ -20,7 +20,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
   };
 
   const handleProfile = () => {
-    router.push("/protected/profile");
+    router.push("/profile");
     setIsDropdownOpen(false);
   };
 

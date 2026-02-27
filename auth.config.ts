@@ -9,23 +9,36 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const userRole = auth?.user?.role;
-      const isOnProtected = nextUrl.pathname.startsWith("/protected");
       const isOnLogin = nextUrl.pathname.startsWith("/login");
-      const isOnProducts = nextUrl.pathname === "/products";
-
-      // Allow access to protected routes only for authenticated users
-      if (isOnProtected) {
-        if (!isLoggedIn) return false; // Redirect unauthenticated users to login page
-        
-        // Block customers from accessing protected routes
-        if (userRole === "customer") {
-          return false; // This will redirect to login page, handle redirect in login page
-        }
-        
+      const isOnVerifyEmail = nextUrl.pathname.startsWith("/verify-email");
+      const isOnPublic = nextUrl.pathname === "/";
+      
+      console.log('🔐 [Auth Check]', {
+        path: nextUrl.pathname,
+        isLoggedIn,
+        userRole,
+        isOnLogin,
+        isOnVerifyEmail
+      });
+      
+      // Allow public routes (login, verify-email, home)
+      if (isOnLogin || isOnVerifyEmail || isOnPublic) {
         return true;
       }
+
+      // All other routes are protected - require authentication
+      if (!isLoggedIn) {
+        console.log('❌ Not logged in, redirecting to login');
+        return false; // Redirect unauthenticated users to login page
+      }
       
-      // Allow access to login page and other public pages
+      // Block customers from accessing admin routes
+      if (userRole === "customer") {
+        console.log('❌ Customer role detected, access denied');
+        return false; // This will redirect to login page
+      }
+      
+      console.log('✅ Access granted');
       return true;
     },
   },

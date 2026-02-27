@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
@@ -32,7 +32,7 @@ export default function AboutUsPage() {
   const fetchAboutUs = useCallback(async () => {
     try {
       setLoading(true);
-      console.log("📥 Fetching About Us data from admin API...");
+      console.log("?? Fetching About Us data from admin API...");
       const response = await aboutUsAPI.get();
       if (response.data.success && response.data.data) {
         // Filter out non-text blocks (only text and heading allowed)
@@ -40,18 +40,18 @@ export default function AboutUsPage() {
           (block: Block) => block.type === "text" || block.type === "heading"
         );
         const blocksToSet = textBlocks.length > 0 ? textBlocks : getDefaultTextBlocks();
-        console.log("✅ Setting blocks from API:", blocksToSet.length, "blocks");
+        console.log("? Setting blocks from API:", blocksToSet.length, "blocks");
         setBlocks(blocksToSet);
       } else {
         // Initialize with default text content if no content exists
         const defaultBlocks = getDefaultTextBlocks();
-        console.log("📄 No content found, setting default blocks:", defaultBlocks.length, "blocks");
+        console.log("?? No content found, setting default blocks:", defaultBlocks.length, "blocks");
         setBlocks(defaultBlocks);
       }
     } catch (err: any) {
-      console.log("❌ No existing about us content, loading default text template");
+      console.log("? No existing about us content, loading default text template");
       const defaultBlocks = getDefaultTextBlocks();
-      console.log("📄 Setting default blocks:", defaultBlocks.length, "blocks");
+      console.log("?? Setting default blocks:", defaultBlocks.length, "blocks");
       setBlocks(defaultBlocks);
     } finally {
       setLoading(false);
@@ -105,7 +105,7 @@ export default function AboutUsPage() {
         type: "text",
         content: `<div style="padding: 32px; background: #374151; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); transition: all 0.3s;">
           <div style="width: 56px; height: 56px; background: linear-gradient(to bottom right, #3b82f6, #2563eb); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
-            <span style="font-size: 32px;">📦</span>
+            <span style="font-size: 32px;">??</span>
           </div>
           <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 16px; color: #ffffff;">Inventory Management</h3>
           <p style="color: #d1d5db; line-height: 1.6;">Track stock levels, manage products with variations, and get real-time inventory updates</p>
@@ -123,7 +123,7 @@ export default function AboutUsPage() {
         type: "text",
         content: `<div style="padding: 32px; background: #374151; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); transition: all 0.3s;">
           <div style="width: 56px; height: 56px; background: linear-gradient(to bottom right, #a855f7, #9333ea); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
-            <span style="font-size: 32px;">🛒</span>
+            <span style="font-size: 32px;">??</span>
           </div>
           <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 16px; color: #ffffff;">Order Processing</h3>
           <p style="color: #d1d5db; line-height: 1.6;">Streamline order management from creation to fulfillment with automated workflows</p>
@@ -141,7 +141,7 @@ export default function AboutUsPage() {
         type: "text",
         content: `<div style="padding: 32px; background: #374151; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); transition: all 0.3s;">
           <div style="width: 56px; height: 56px; background: linear-gradient(to bottom right, #22c55e, #16a34a); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
-            <span style="font-size: 32px;">👥</span>
+            <span style="font-size: 32px;">??</span>
           </div>
           <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 16px; color: #ffffff;">Customer Management</h3>
           <p style="color: #d1d5db; line-height: 1.6;">Maintain detailed customer profiles and track purchase history for better relationships</p>
@@ -159,7 +159,7 @@ export default function AboutUsPage() {
         type: "text",
         content: `<div style="padding: 32px; background: #374151; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); transition: all 0.3s;">
           <div style="width: 56px; height: 56px; background: linear-gradient(to bottom right, #eab308, #ca8a04); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
-            <span style="font-size: 32px;">📊</span>
+            <span style="font-size: 32px;">??</span>
           </div>
           <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 16px; color: #ffffff;">Analytics & Reports</h3>
           <p style="color: #d1d5db; line-height: 1.6;">Gain insights with comprehensive dashboards and detailed business analytics</p>
@@ -177,7 +177,7 @@ export default function AboutUsPage() {
         type: "text",
         content: `<div style="padding: 32px; background: #374151; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); transition: all 0.3s;">
           <div style="width: 56px; height: 56px; background: linear-gradient(to bottom right, #ef4444, #dc2626); border-radius: 12px; display: flex; align-items: center; justify-center; margin-bottom: 24px;">
-            <span style="font-size: 32px;">⏰</span>
+            <span style="font-size: 32px;">?</span>
           </div>
           <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 16px; color: #ffffff;">Attendance Tracking</h3>
           <p style="color: #d1d5db; line-height: 1.6;">Monitor employee attendance and work hours with easy check-in/check-out system</p>
@@ -195,7 +195,7 @@ export default function AboutUsPage() {
         type: "text",
         content: `<div style="padding: 32px; background: #374151; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); transition: all 0.3s;">
           <div style="width: 56px; height: 56px; background: linear-gradient(to bottom right, #6366f1, #4f46e5); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
-            <span style="font-size: 32px;">🔐</span>
+            <span style="font-size: 32px;">??</span>
           </div>
           <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 16px; color: #ffffff;">User Management</h3>
           <p style="color: #d1d5db; line-height: 1.6;">Role-based access control with secure authentication and authorization</p>
@@ -288,7 +288,7 @@ export default function AboutUsPage() {
 
   // Log blocks state changes
   useEffect(() => {
-    console.log("🔄 Blocks state changed:", blocks.length, "blocks");
+    console.log("?? Blocks state changed:", blocks.length, "blocks");
   }, [blocks]);
 
   useEffect(() => {
@@ -305,7 +305,7 @@ export default function AboutUsPage() {
 
     // If not admin, redirect to dashboard
     if (session?.user?.role !== "admin") {
-      router.push("/protected/dashboard");
+      router.push("/dashboard");
       return;
     }
 
@@ -319,17 +319,17 @@ export default function AboutUsPage() {
       setError("");
       setSuccess("");
 
-      console.log("💾 ========== SAVE CLICKED ==========");
-      console.log("💾 Current blocks state:", blocks);
-      console.log("💾 Block count:", blocks.length);
-      console.log("💾 First 3 blocks:", blocks.slice(0, 3).map(b => ({ 
+      console.log("?? ========== SAVE CLICKED ==========");
+      console.log("?? Current blocks state:", blocks);
+      console.log("?? Block count:", blocks.length);
+      console.log("?? First 3 blocks:", blocks.slice(0, 3).map(b => ({ 
         id: b.id, 
         type: b.type, 
         contentPreview: b.content.substring(0, 50) 
       })));
 
       if (blocks.length === 0) {
-        console.error("❌ BLOCKS IS EMPTY! Cannot save.");
+        console.error("? BLOCKS IS EMPTY! Cannot save.");
         setError("No content to save. Please wait for page to load or add content.");
         setSaving(false);
         return;
@@ -340,14 +340,14 @@ export default function AboutUsPage() {
         pageBackgroundColor: "#111827" // gray-900 to match display
       };
 
-      console.log("💾 Sending payload:", { 
+      console.log("?? Sending payload:", { 
         blockCount: payload.blocks.length,
         pageBackgroundColor: payload.pageBackgroundColor
       });
 
       const response = await aboutUsAPI.post(payload);
 
-      console.log("✅ Save response:", response.data);
+      console.log("? Save response:", response.data);
 
       if (response.data.success) {
         setSuccess("About Us content saved successfully!");
@@ -356,7 +356,7 @@ export default function AboutUsPage() {
         setError(response.data.message || "Failed to save content");
       }
     } catch (err: any) {
-      console.error("❌ Save error:", err);
+      console.error("? Save error:", err);
       setError(err.response?.data?.message || err.message || "Failed to save content");
     } finally {
       setSaving(false);
@@ -404,7 +404,7 @@ export default function AboutUsPage() {
                 {success}
               </div>
             )}
-            <Button variant="secondary" onClick={() => router.push("/protected/dashboard")}>
+            <Button variant="secondary" onClick={() => router.push("/dashboard")}>
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving}>

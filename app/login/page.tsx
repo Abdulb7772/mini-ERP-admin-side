@@ -60,7 +60,7 @@ function LoginForm() {
           // Success - show toast and redirect to dashboard
           toast.success("Login successful!");
           // Use router.push instead of window.location to prevent reload
-          router.push("/protected/dashboard");
+          router.push("/dashboard");
         }
       } catch (error) {
         setLoading(false);

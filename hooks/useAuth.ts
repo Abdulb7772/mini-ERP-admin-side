@@ -17,7 +17,7 @@ export const useAuth = (roles: string[] = []) => {
     }
 
     if (session?.user && roles.length && !roles.includes(session.user.role)) {
-      router.push("/protected/dashboard");
+      router.push("/dashboard");
     }
   }, [session, status, router, roles]);
 

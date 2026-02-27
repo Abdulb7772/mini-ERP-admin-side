@@ -116,7 +116,7 @@ export default function BlogsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Blog Management</h1>
           <p className="text-gray-600 mt-1">Manage your blog posts</p>
         </div>
-        <Button onClick={() => router.push("/protected/blogs/add")}>
+        <Button onClick={() => router.push("/blogs/add")}>
           + Add Blog
         </Button>
       </div>
@@ -254,7 +254,7 @@ export default function BlogsPage() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          router.push(`/protected/blogs/edit/${blog._id}`);
+                          router.push(`/blogs/edit/${blog._id}`);
                         }}
                         className="text-indigo-600 hover:text-indigo-900"
                       >

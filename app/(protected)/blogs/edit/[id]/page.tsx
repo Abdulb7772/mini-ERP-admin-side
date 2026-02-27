@@ -56,7 +56,7 @@ export default function EditBlogPage() {
     try {
       await blogAPI.updateBlog(blogId, formData);
       toast.success("Blog updated successfully!");
-      router.push("/protected/blogs");
+      router.push("/blogs");
     } catch (error) {
       console.error("Error updating blog:", error);
       toast.error("Failed to update blog");
@@ -137,7 +137,7 @@ export default function EditBlogPage() {
           <Button
             type="button"
             variant="secondary"
-            onClick={() => router.push("/protected/blogs")}
+            onClick={() => router.push("/blogs")}
           >
             Cancel
           </Button>

@@ -15,11 +15,11 @@ export default function ProtectedLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden min-h-0">
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <main className="flex-1 p-6 bg-gray-100 overflow-auto">{children}</main>
+        <main className="flex-1 p-6 bg-gray-100 overflow-auto min-h-0">{children}</main>
       </div>
     </div>
   );

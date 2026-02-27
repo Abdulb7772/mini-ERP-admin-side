@@ -34,7 +34,7 @@ export default function AddBlogPage() {
     try {
       await blogAPI.createBlog(formData);
       toast.success("Blog created successfully!");
-      router.push("/protected/blogs");
+      router.push("/blogs");
     } catch (error) {
       console.error("Error creating blog:", error);
       toast.error("Failed to create blog");
@@ -94,7 +94,7 @@ export default function AddBlogPage() {
           <Button
             type="button"
             variant="secondary"
-            onClick={() => router.push("/protected/blogs")}
+            onClick={() => router.push("/blogs")}
           >
             Cancel
           </Button>

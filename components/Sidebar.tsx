@@ -37,91 +37,91 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const navigation = [
     { 
       name: "Dashboard", 
-      href: "/protected/dashboard", 
+      href: "/dashboard", 
       icon: "📊", 
       roles: ["admin", "top_manager", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"] 
     },
     { 
       name: "Products", 
-      href: "/protected/products", 
+      href: "/products", 
       icon: "📦", 
       roles: ["admin", "top_manager", "inventory_manager"] 
     },
     { 
       name: "Stocks", 
-      href: "/protected/stocks", 
+      href: "/stocks", 
       icon: "📈", 
       roles: ["admin", "top_manager", "inventory_manager", "staff"] 
     },
     { 
       name: "Orders", 
-      href: "/protected/orders", 
+      href: "/orders", 
       icon: "🛒", 
       roles: ["admin", "top_manager", "order_manager", "staff"] 
     },
     { 
       name: "Refund", 
-      href: "/protected/refund", 
+      href: "/refund", 
       icon: "💰", 
       roles: ["admin", "top_manager", "order_manager"] 
     },
     { 
       name: "Customers", 
-      href: "/protected/customers", 
+      href: "/customers", 
       icon: "👤", 
       roles: ["admin", "top_manager", "customer_manager"] 
     },
     { 
       name: "Reviews", 
-      href: "/protected/reviews", 
+      href: "/reviews", 
       icon: "⭐", 
       roles: ["admin", "top_manager", "customer_manager"] 
     },
     { 
       name: "Complaints", 
-      href: "/protected/complaints", 
+      href: "/complaints", 
       icon: "⚠️", 
       roles: ["admin", "top_manager", "customer_manager", "staff"] 
     },
     { 
       name: "Attendance", 
-      href: "/protected/attendance", 
+      href: "/attendance", 
       icon: "📅", 
       roles: ["admin", "top_manager", "employee_manager", "inventory_manager", "employee_manager", "blog_manager", "order_manager", "customer_manager", "report_manager", "staff"] 
     },
     { 
       name: "Reports", 
-      href: "/protected/reports", 
+      href: "/reports", 
       icon: "📋", 
       roles: ["admin", "top_manager", "report_manager"] 
     },
     { 
       name: "Users", 
-      href: "/protected/users", 
+      href: "/users", 
       icon: "👥", 
       roles: ["admin", "top_manager"] 
     },
     { 
       name: "Teams", 
-      href: "/protected/teams", 
+      href: "/teams", 
       icon: "👨‍👩‍👧‍👦", 
       roles: ["admin", "top_manager"] 
     },
     { 
       name: "About Us", 
-      href: "/protected/about-us", 
+      href: "/about-us", 
       icon: "ℹ️", 
       roles: ["admin"] 
     },
     { 
       name: "Blogs", 
-      href: "/protected/blogs", 
+      href: "/blogs", 
       icon: "📝", 
       roles: ["admin", "top_manager", "blog_manager"] 
     },
     { 
       name: "Employees", 
-      href: "/protected/employees", 
+      href: "/employees", 
       icon: "👔", 
       roles: ["admin", "top_manager", "employee_manager"] 
     },
@@ -135,7 +135,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     <div
       className={`bg-gray-900 text-white flex flex-col transition-all duration-300 ${
         isOpen ? "w-64" : "w-20"
-      }`}
+      } h-full min-h-0 overflow-hidden`}
     >
       <div className={`p-4 border-b border-gray-800 ${isOpen ? "" : "flex justify-center"}`}>
         {isOpen ? (
@@ -155,7 +155,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         )}
       </div>
 
-      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto min-h-0">
         {filteredNav.map((item) => (
           <Link
             key={item.name}
@@ -177,9 +177,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Chat Button */}
       <div className="px-2 pb-4 border-t border-gray-800 pt-4">
         <Link
-          href="/protected/messages"
+          href="/messages"
           className={`w-full ${
-            pathname === "/protected/messages"
+            pathname === "/messages"
               ? "bg-gray-800 text-white"
               : "text-gray-300 hover:bg-gray-700 hover:text-white"
           } group flex items-center ${
@@ -190,7 +190,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <span className={`text-2xl ${isOpen ? "mr-3" : ""}`}>💬</span>
           {isOpen && <span>Messages</span>}
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse shadow-lg">
+            <span className="absolute -top-1 -right-1 bg-linear-to-r from-red-500 to-pink-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse shadow-lg">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
