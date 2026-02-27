@@ -19,7 +19,7 @@ export default function ProtectedLayout({
       <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex flex-1 overflow-hidden min-h-0">
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <main className="flex-1 p-6 bg-gray-100 overflow-auto min-h-0">{children}</main>
+        <main className="flex-1 p-6 bg-linear-to-br from-pink-200 via-purple-100 to-blue-300 overflow-auto min-h-0">{children}</main>
       </div>
     </div>
   );

@@ -133,18 +133,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <div
-      className={`bg-gray-900 text-white flex flex-col transition-all duration-300 ${
-        isOpen ? "w-64" : "w-20"
-      } h-full min-h-0 overflow-hidden`}
+      className={`bg-linear-to-r from-gray-700 via-gray-500 to-gray-700 text-white flex flex-col transition-all duration-300 ${
+        isOpen ? "w-50" : "w-15"
+      } h-full min-h-0 overflow-hidden shadow-xl`}
     >
-      <div className={`p-4 border-b border-gray-800 ${isOpen ? "" : "flex justify-center"}`}>
+      <div className={`p-4 border-b border-gray-700 ${isOpen ? "" : "flex justify-center"}`}>
         {isOpen ? (
           <div>
-            <h1 className="text-xl font-bold">Mini ERP</h1>
-            <p className="text-sm text-gray-400 mt-1">
+            <h1 className="text-xl font-bold text-white">Mini ERP</h1>
+            <p className="text-sm text-gray-300 mt-1">
               {user?.name}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-400">
               ({user?.role})
             </p>
           </div>
@@ -155,42 +155,42 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         )}
       </div>
 
-      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto min-h-0">
+      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-500 [&::-webkit-scrollbar-thumb]:bg-blue-800 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-blue-600">
         {filteredNav.map((item) => (
           <Link
             key={item.name}
             href={item.href}
             className={`${
               pathname === item.href
-                ? "bg-gray-800 text-white"
+                ? "bg-blue-600 text-white shadow-lg"
                 : "text-gray-300 hover:bg-gray-700 hover:text-white"
             } group flex items-center ${
               isOpen ? "px-3" : "px-0 justify-center"
-            } py-2 text-sm font-medium rounded-md transition-colors`}
+            } py-2.5 text-sm font-medium rounded-lg transition-all`}
             title={!isOpen ? item.name : undefined}
           >
-            <span className={`text-2xl ${isOpen ? "mr-3" : ""}`}>{item.icon}</span>
+            <span className={`text-xl ${isOpen ? "mr-3" : ""}`}>{item.icon}</span>
             {isOpen && <span>{item.name}</span>}
           </Link>
         ))}
 
       {/* Chat Button */}
-      <div className="px-2 pb-4 border-t border-gray-800 pt-4">
+      <div className="px-2 pb-4 border-t border-gray-700 pt-4">
         <Link
           href="/messages"
           className={`w-full ${
             pathname === "/messages"
-              ? "bg-gray-800 text-white"
+              ? "bg-blue-600 text-white shadow-lg"
               : "text-gray-300 hover:bg-gray-700 hover:text-white"
           } group flex items-center ${
             isOpen ? "px-3" : "px-0 justify-center"
-          } py-2 text-sm font-medium rounded-md transition-colors relative`}
+          } py-2.5 text-sm font-medium rounded-lg transition-all relative`}
           title={!isOpen ? "Messages" : undefined}
         >
-          <span className={`text-2xl ${isOpen ? "mr-3" : ""}`}>💬</span>
+          <span className={`text-xl ${isOpen ? "mr-3" : ""}`}>💬</span>
           {isOpen && <span>Messages</span>}
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-linear-to-r from-red-500 to-pink-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse shadow-lg">
+            <span className="absolute -top-1 -right-1 bg-linear-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse shadow-lg">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}

@@ -25,7 +25,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
   };
 
   return (
-    <nav className="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Left: Hamburger Menu */}
@@ -49,7 +49,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 
           {/* Center: Mini ERP Title */}
           <div className="flex-1 flex justify-center">
-            <h1 className="text-2xl font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-linear-to-r from-purple-600 via-pink-500 to-purple-600 bg-clip-text text-transparent">
               Mini ERP
             </h1>
           </div>
