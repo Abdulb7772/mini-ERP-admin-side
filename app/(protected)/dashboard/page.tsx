@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useAuth } from "@/hooks/useAuth";
 import { dashboardAPI, productAPI, notificationAPI } from "@/services/apiService";
 import { CardSkeleton, TableSkeleton } from "@/components/Skeleton";
+import ProductDetailsModal from "@/components/ProductDetailsModal";
 
 interface DashboardStats {
   totalSales: number;
@@ -33,6 +34,8 @@ export default function DashboardPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -341,7 +344,14 @@ export default function DashboardPage() {
                   else if (stock >= 3) barColor = 'bg-orange-500';
                   
                   return (
-                    <div key={product._id} className="space-y-1">
+                    <div 
+                      key={product._id} 
+                      className="space-y-1 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                      onClick={() => {
+                        setSelectedProduct(product);
+                        setIsModalOpen(true);
+                      }}
+                    >
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-medium text-gray-700 truncate flex-1">
                           {product.name}
@@ -423,7 +433,11 @@ export default function DashboardPage() {
                     .map((product: any) => (
                       <div 
                         key={product._id} 
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setIsModalOpen(true);
+                        }}
                       >
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-gray-900 truncate">
@@ -452,6 +466,18 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Product Details Modal */}
+      {selectedProduct && (
+        <ProductDetailsModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedProduct(null);
+          }}
+          product={selectedProduct}
+        />
+      )}
     </div>
   );
 }

@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { confirmToast } from "@/utils/confirmToast";
 
 export default function ProductsPage() {
-  const { role } = useAuth(["admin", "inventory_manager"]);
+  const { role } = useAuth(["admin", "top_manager", "inventory_manager"]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);

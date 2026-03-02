@@ -43,7 +43,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     },
     { 
       name: "Products", 
-      href: "/products", 
+      href: "/admin-products", 
       icon: "📦", 
       roles: ["admin", "top_manager", "inventory_manager"] 
     },
