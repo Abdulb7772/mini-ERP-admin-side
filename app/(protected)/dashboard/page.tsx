@@ -158,7 +158,7 @@ export default function DashboardPage() {
     },
     {
       title: "Low Stock Items",
-      value: products.filter((p: any) => p.stock >= 3 && p.stock <= 5).length || 0,
+      value: products.filter((p: any) => p.stock > 0 && p.stock <= 3).length || 0,
       icon: (
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-4.41 0-8-3.59-8-8V8.5l8-4.5 8 4.5V12c0 4.41-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
