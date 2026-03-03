@@ -2,6 +2,7 @@ import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
 
 export const authConfig = {
+  basePath: "/api/auth",
   pages: {
     signIn: "/login",
   },
