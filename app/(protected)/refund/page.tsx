@@ -286,8 +286,11 @@ export default function RefundManagementPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm">
-                        <div className="font-medium text-gray-900">{order.customerId?.name || 'N/A'}</div>
+                        <div className="font-medium text-gray-900">{order.customerId?.name || 'Unknown Customer'}</div>
                         <div className="text-gray-500">{order.customerId?.email || 'N/A'}</div>
+                        {order.customerId?.phone && (
+                          <div className="text-gray-500 text-xs">📞 {order.customerId.phone}</div>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">

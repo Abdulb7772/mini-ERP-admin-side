@@ -30,12 +30,15 @@ interface Order {
   totalAmount: number;
   status: string;
   paymentStatus: string;
-  shippingAddress: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
+  shippingAddress?: {
+    fullName?: string;
+    phone?: string;
+    address?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    country?: string;
   };
   createdAt: string;
 }
@@ -286,8 +289,22 @@ export default function OrdersPage() {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900 border-r border-gray-200">
                       <div className="max-w-xs">
-                        {order.customerId?.address ? (
-                          <div className="whitespace-pre-wrap">{order.customerId.address}</div>
+                        {order.shippingAddress && Object.values(order.shippingAddress).some(val => val) ? (
+                          <div className="text-xs whitespace-pre-wrap">
+                            {order.shippingAddress.fullName && <div className="font-medium">{order.shippingAddress.fullName}</div>}
+                            {order.shippingAddress.phone && <div>{order.shippingAddress.phone}</div>}
+                            {order.shippingAddress.address && <div>{order.shippingAddress.address}</div>}
+                            {order.shippingAddress.street && <div>{order.shippingAddress.street}</div>}
+                            {(order.shippingAddress.city || order.shippingAddress.state || order.shippingAddress.zipCode) && (
+                              <div>
+                                {[order.shippingAddress.city, order.shippingAddress.state, order.shippingAddress.zipCode]
+                                  .filter(Boolean).join(", ")}
+                              </div>
+                            )}
+                            {order.shippingAddress.country && <div>{order.shippingAddress.country}</div>}
+                          </div>
+                        ) : order.customerId?.address ? (
+                          <div className="whitespace-pre-wrap text-xs">{order.customerId.address}</div>
                         ) : (
                           <span className="text-gray-400">No address</span>
                         )}

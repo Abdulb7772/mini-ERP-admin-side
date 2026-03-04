@@ -386,8 +386,11 @@ export default function ComplaintsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{complaint.customerId?.name || "Unknown"}</div>
+                        <div className="text-sm text-gray-900">{complaint.customerId?.name || "Unknown Customer"}</div>
                         <div className="text-xs text-gray-500">{complaint.customerId?.email || "N/A"}</div>
+                        {complaint.customerId?.phone && (
+                          <div className="text-xs text-gray-500">📞 {complaint.customerId.phone}</div>
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900 max-w-xs truncate">
